@@ -61,7 +61,7 @@ public class UsuarioDAO {
 			String sql = " SELECT * FROM usuario WHERE id <> 29 ORDER BY id ";
 			PreparedStatement lista = connection.prepareStatement(sql);
 			ResultSet resultSet = lista.executeQuery();
-			
+
 			while (resultSet.next()) {
 				UsuarioBean usuarioBean = new UsuarioBean();
 				usuarioBean.setId(resultSet.getLong("id"));
@@ -115,14 +115,27 @@ public class UsuarioDAO {
 
 		try {
 
-			String sql = " UPDATE usuario SET nome = ?, login = ?, senha = ?, "
-					+ "cep = ?, rua = ?, bairro = ?, "
-					+ "cidade = ?, estado = ?, fotobase64 = ?, "
-					+ "contenttype = ?, curriculobase64 = ?, contenttypecurriculo = ?, "
-					+ "fotobase64miniatura = ? WHERE id = "
-					+ usuario.getId();
-			
-			PreparedStatement atualizar = connection.prepareStatement(sql);
+			StringBuilder sql = new StringBuilder();
+
+			sql.append(" UPDATE usuario SET nome = ?, login = ?, senha = ?, ");
+			sql.append("cep = ?, rua = ?, bairro = ?, ");
+			sql.append("cidade = ?, estado = ?");
+
+			if (usuario.isAtualizarImage()) {
+				sql.append(", fotobase64 = ?, contenttype = ?");
+			}
+
+			if (usuario.isAtualizarPdf()) {
+				sql.append(", curriculobase64 = ?, contenttypecurriculo = ?");
+			}
+
+			if (usuario.isAtualizarImage()) {
+				sql.append(", fotobase64miniatura = ? ");
+			}
+
+			sql.append(" WHERE id = " + usuario.getId());
+
+			PreparedStatement atualizar = connection.prepareStatement(sql.toString());
 			atualizar.setString(1, usuario.getNome());
 			atualizar.setString(2, usuario.getLogin());
 			atualizar.setString(3, usuario.getSenha());
@@ -131,11 +144,21 @@ public class UsuarioDAO {
 			atualizar.setString(6, usuario.getBairro());
 			atualizar.setString(7, usuario.getCidade());
 			atualizar.setString(8, usuario.getUf());
-			atualizar.setString(9, usuario.getFotoBase64());
-			atualizar.setString(10, usuario.getContentType());
-			atualizar.setString(11, usuario.getCurriculoBase64());
-			atualizar.setString(12, usuario.getContentTypeCurriculo());
-			atualizar.setString(13, usuario.getFotoBase64Miniatura());
+
+			if (usuario.isAtualizarImage()) {
+				atualizar.setString(9, usuario.getFotoBase64());
+				atualizar.setString(10, usuario.getContentType());
+			}
+
+			if (usuario.isAtualizarPdf()) {
+				atualizar.setString(11, usuario.getCurriculoBase64());
+				atualizar.setString(12, usuario.getContentTypeCurriculo());
+			}
+
+			if (usuario.isAtualizarImage()) {
+				atualizar.setString(13, usuario.getFotoBase64Miniatura());
+			}
+
 			atualizar.executeUpdate();
 			connection.commit();
 

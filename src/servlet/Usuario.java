@@ -210,15 +210,7 @@ public class Usuario extends HttpServlet {
 						/* Fim Miniatura Imagem */
 
 					} else {
-
-						usuario.setFotoBase64(request.getParameter("fotoTemp"));
-						usuario.setContentType(request.getParameter("contentTypeTemp"));
-
-						if (usuario.getFotoBase64() == null || usuario.getFotoBase64().isEmpty()) {
-
-							usuario.setFotoBase64(null);
-							usuario.setContentType(null);
-						}
+						usuario.setAtualizarImage(false);
 					}
 
 					/* Processa PDF */

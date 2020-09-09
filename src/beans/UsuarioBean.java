@@ -20,6 +20,9 @@ public class UsuarioBean {
 
 	private String tempFotoUser;
 
+	private boolean atualizarImage = true;
+	private boolean atualizarPdf = true;
+
 	public String getTempFotoUser() {
 
 		tempFotoUser = "data:" + contentType + ";base64," + fotoBase64;
@@ -145,6 +148,22 @@ public class UsuarioBean {
 
 	public void setFotoBase64Miniatura(String fotoBase64Miniatura) {
 		this.fotoBase64Miniatura = fotoBase64Miniatura;
+	}
+
+	public boolean isAtualizarImage() {
+		return atualizarImage;
+	}
+
+	public void setAtualizarImage(boolean atualizarImage) {
+		this.atualizarImage = atualizarImage;
+	}
+
+	public boolean isAtualizarPdf() {
+		return atualizarPdf;
+	}
+
+	public void setAtualizarPdf(boolean atualizarPdf) {
+		this.atualizarPdf = atualizarPdf;
 	}
 
 }
